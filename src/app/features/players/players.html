@@ -1,1 +1,7 @@
-<p>players works!</p>
+<app-search (search)="onSearch($event)" [placeholder]="searchForName()" />
+
+<ul>
+    @for (player of players(); track player.id) {
+    <li>{{player.playerName}} - {{player.pos}}</li>
+    }
+</ul>

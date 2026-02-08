@@ -1,1 +1,7 @@
-<p>nations works!</p>
+<app-search (search)="onSearch($event)" [placeholder]="searchForNation()" />
+
+<ul>
+    @for (player of players(); track player.id) {
+    <li>{{player.playerName}} - {{player.nation}}</li>
+    }
+</ul>
