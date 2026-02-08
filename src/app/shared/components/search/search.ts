@@ -14,7 +14,6 @@ export class SearchComponent {
 
   submitSearch() {
     const value = this.query.trim();
-    if (!value) return;
     console.log(`searching for ${value}`);
 
     this.search.emit(value);

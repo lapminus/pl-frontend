@@ -2,10 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { SearchComponent } from '../../shared/components/search/search';
 import { SearchService } from '../../shared/services/search';
 import { PlayerDto } from '../../shared/models/playerDto.model';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-players',
-  imports: [SearchComponent],
+  imports: [SearchComponent, RouterModule, CommonModule],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })

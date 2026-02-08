@@ -12,7 +12,8 @@ import { HeaderComponent } from './layout/header/header';
   styles: `
     main {
       padding: 16px;
-      background-color: red;
+      background-color: #202c3f; /* soft light gray background */
+      min-height: calc(100vh - 64px);
     }
   `,
 })

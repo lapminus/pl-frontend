@@ -1,7 +1,26 @@
 <app-search (search)="onSearch($event)" [placeholder]="searchForName()" />
 
-<ul>
+@if (players().length === 0) {
+<div class="card text-bg-danger">
+    <div class="card-body">
+        <h5 class="card-title">No results</h5>
+    </div>
+</div>
+} @else {
+<div class="d-flex flex-wrap justify-content-center mt-3">
     @for (player of players(); track player.id) {
-    <li>{{player.playerName}} - {{player.pos}}</li>
+    <a [routerLink]="['/player', player.id]" class="card player-card text-decoration-none text-dark m-2"
+        [ngClass]="player.pos ? player.pos.toLowerCase() : 'unknown-pos'">
+        <div class="card-body">
+            <h5 class="card-title">{{ player.playerName || '-' }}</h5>
+            <p class="card-text">Plays for {{ player.teamName || '-' }}</p>
+            <p class="card-text">Nation: {{ player.nation || '-' }}</p>
+            <p class="card-text">Position: {{ player.pos || '-' }}</p>
+        </div>
+        <div class="hover-overlay d-flex justify-content-center align-items-center">
+            <span>More Stats</span>
+        </div>
+    </a>
     }
-</ul>
+</div>
+}
