@@ -16,18 +16,25 @@ export class PlayerDetail implements OnInit {
   route = inject(ActivatedRoute);
 
   query = signal<string | number>('');
-  player = signal<PlayerDto | null>(null);
-  
+  player = signal<PlayerDto | null | undefined>(undefined);
+
   excludeFields = ['playerName', 'id'];
 
   ngOnInit(): void {
     const playerId = Number(this.route.snapshot.paramMap.get('id'));
+    this.query.set(playerId);
+
     if (playerId) {
-      this.playerService.searchById(playerId).subscribe((p) => {
-        this.player.set(p);
+      this.playerService.searchById(playerId).subscribe({
+        next: (p) => {
+          this.player.set(p);
+        },
+        error: (err) => {
+          this.player.set(null);
+        },
       });
     } else {
-      this.query.set(playerId);
+      this.player.set(null);
     }
   }
 }
