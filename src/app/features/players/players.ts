@@ -1,14 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { SearchComponent } from '../../shared/components/search/search';
 import { PlayerService } from '../../shared/services/player.service';
-import { RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
 
 @Component({
   selector: 'app-players',
-  imports: [SearchComponent, RouterModule, CommonModule, NoResultsFound],
+  imports: [SearchComponent, CommonModule, NoResultsFound, RouterLink],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })

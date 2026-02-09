@@ -7,5 +7,5 @@ import { Component, input } from '@angular/core';
   styleUrl: './no-results-found.scss',
 })
 export class NoResultsFound {
-  query = input.required<string>();
+  query = input.required<string | number>();
 }
