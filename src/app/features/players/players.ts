@@ -1,20 +1,20 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { SearchComponent } from '../../shared/components/search/search';
+import { SharedSearch } from '../../shared/components/shared-search/shared-search';
 import { PlayerService } from '../../shared/services/player.service';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
-import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
+import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 
 @Component({
   selector: 'app-players',
-  imports: [SearchComponent, CommonModule, NoResultsFound, RouterLink],
+  imports: [SharedSearch, CommonModule, SharedNoResultsFound, RouterLink],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })
 export class Players implements OnInit {
-  searchForName = signal('Search player...');
-  query = signal('');
+  sendingPlaceholder = signal('Search player...');
+  sendingQuery = signal('');
 
   playerService = inject(PlayerService);
   players = signal<PlayerSummaryDto[]>([]);
@@ -25,8 +25,8 @@ export class Players implements OnInit {
     });
   }
 
-  onSearch(name: string) {
-    this.query.set(name);
+  receiveSearch(name: string) {
+    this.sendingQuery.set(name);
     this.playerService.search({ name }).subscribe((pageResult) => {
       console.log('HTTP response:', JSON.stringify(pageResult, null, 2));
       this.players.set(pageResult.content);

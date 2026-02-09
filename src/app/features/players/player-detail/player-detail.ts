@@ -1,13 +1,13 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { PlayerService } from '../../../shared/services/player.service';
 import { ActivatedRoute } from '@angular/router';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
 import { KeyValuePipe } from '@angular/common';
-import { NoResultsFound } from '../../../shared/components/no-results-found/no-results-found';
+import { SharedNoResultsFound } from '../../../shared/components/shared-no-results-found/shared-no-results-found';
 
 @Component({
   selector: 'app-player-detail',
-  imports: [KeyValuePipe, NoResultsFound],
+  imports: [KeyValuePipe, SharedNoResultsFound],
   templateUrl: './player-detail.html',
   styleUrl: './player-detail.scss',
 })
@@ -15,14 +15,14 @@ export class PlayerDetail implements OnInit {
   playerService = inject(PlayerService);
   route = inject(ActivatedRoute);
 
-  query = signal<string | number>('');
+  sendingQuery = signal<string | number>('');
   player = signal<PlayerDto | null | undefined>(undefined);
 
   excludeFields = ['playerName', 'id'];
 
   ngOnInit(): void {
     const playerId = Number(this.route.snapshot.paramMap.get('id'));
-    this.query.set(playerId);
+    this.sendingQuery.set(playerId);
 
     if (playerId) {
       this.playerService.searchById(playerId).subscribe({

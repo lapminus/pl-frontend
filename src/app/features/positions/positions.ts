@@ -1,24 +1,24 @@
 import { Component, inject, input, signal } from '@angular/core';
-import { SearchComponent } from '../../shared/components/search/search';
-import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
+import { SharedSearch } from '../../shared/components/shared-search/shared-search';
+import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 import { PlayerService } from '../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 
 @Component({
   selector: 'app-positions',
-  imports: [SearchComponent, NoResultsFound],
+  imports: [SharedSearch, SharedNoResultsFound],
   templateUrl: './positions.html',
   styleUrl: './positions.scss',
 })
 export class Positions {
-  searchForPosition = signal('Search position...');
-  query = signal('');
+  sendingPlaceholder = signal('Search position...');
+  sendingQuery = signal('');
 
   playerService = inject(PlayerService);
   players = signal<PlayerSummaryDto[]>([]);
 
-  onSearch(position: string) {
-    this.query.set(position);
+  receiveSearch(position: string) {
+    this.sendingQuery.set(position);
     this.playerService.search({ position }).subscribe((pageResult) => {
       this.players.set(pageResult.content);
     });

@@ -1,25 +1,26 @@
 import { Component, inject, input, signal } from '@angular/core';
-import { SearchComponent } from '../../shared/components/search/search';
+import { SharedSearch } from '../../shared/components/shared-search/shared-search';
 import { PlayerService } from '../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
-import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
+import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 
 @Component({
   selector: 'app-nations',
-  imports: [SearchComponent, NoResultsFound],
+  imports: [SharedSearch, SharedNoResultsFound],
   templateUrl: './nations.html',
   styleUrl: './nations.scss',
 })
 export class Nations {
-  searchForNation = signal('Search nation...');
+  sendingPlaceholder = signal('Search nation...');
   playerService = inject(PlayerService);
 
-  query = signal('');
+  sendingQuery = signal('');
   players = signal<PlayerSummaryDto[]>([]);
 
-  onSearch(nation: string) {
-    this.query.set(nation);
+  receiveSearch(nation: string) {
+    this.sendingQuery.set(nation);
     this.playerService.search({ nation }).subscribe((pageResult) => {
+      console.log('HTTP response: ', JSON.stringify(pageResult, null, 2));
       this.players.set(pageResult.content);
     });
   }

@@ -1,7 +1,7 @@
-<app-search (search)="onSearch($event)" [searchPlaceholder]="searchForName()" />
+<app-shared-search (searchSubmitted)="receiveSearch($event)" [receivedPlaceholder]="sendingPlaceholder()" />
 
-@if (players().length === 0 && query()) {
-<app-no-results-found [query]="query()"/>
+@if (players().length === 0 && sendingQuery()) {
+<app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
 <div class="d-flex flex-wrap justify-content-center mt-3">
     @for (player of players(); track player.id) {

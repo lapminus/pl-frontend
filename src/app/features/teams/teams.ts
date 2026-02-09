@@ -1,24 +1,24 @@
 import { Component, inject, signal } from '@angular/core';
-import { SearchComponent } from '../../shared/components/search/search';
-import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
+import { SharedSearch } from '../../shared/components/shared-search/shared-search';
+import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 import { PlayerService } from '../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 
 @Component({
   selector: 'app-teams',
-  imports: [SearchComponent, NoResultsFound],
+  imports: [SharedSearch, SharedNoResultsFound],
   templateUrl: './teams.html',
   styleUrl: './teams.scss',
 })
 export class Teams {
-  searchForTeam = signal('Search team...');
-  query = signal('');
+  sendingPlaceholder = signal('Search team...');
+  sendingQuery = signal('');
 
   playerService = inject(PlayerService);
   players = signal<PlayerSummaryDto[]>([]);
 
-  onSearch(team: string) {
-    this.query.set(team);
+  receiveSearch(team: string) {
+    this.sendingQuery.set(team);
     this.playerService.search({ team }).subscribe((pageResult) => {
       this.players.set(pageResult.content);
     });
