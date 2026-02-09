@@ -2,9 +2,7 @@
   width: 250px;
   border-radius: 0.75rem;
   text-align: center;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   overflow: hidden;
 
   &:hover {
@@ -36,22 +34,8 @@
   }
 }
 
-.unknown-pos {
-  background-color: #e45a5a;
-}
-
-.fw {
-  background-color: #ffcccc;
-}
-
-.mf {
-  background-color: #ccffcc;
-}
-
-.df {
-  background-color: #fff3cc;
-}
-
-.gk {
-  background-color: #ccccff;
-}
+.unknown-pos {background-color: #e45a5a;}
+.fw {background-color: #ffcccc;}
+.mf {background-color: #ccccff;}
+.df {background-color: #fff3cc;}
+.gk {background-color: #ccffcc;}

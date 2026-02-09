@@ -1,7 +1,7 @@
-<app-search (search)="onSearch($event)" [placeholder]="searchForNation()" />
+<app-search (search)="onSearch($event)" [searchPlaceholder]="searchForNation()" />
 
-<ul>
-    @for (player of players(); track player.id) {
-    <li>{{player.playerName}} - {{player.nation}}</li>
-    }
-</ul>
+@if (players().length === 0 && query()) {
+<app-no-results-found [query]="query()"/>
+} @else {
+<div>Add content later</div>
+}

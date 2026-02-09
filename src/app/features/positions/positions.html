@@ -1,1 +1,7 @@
-<app-search [placeholder]="searchForPosition()" />
+<app-search (search)="onSearch($event)" [searchPlaceholder]="searchForPosition()" />
+
+@if (players().length === 0 && query()) {
+<app-no-results-found [query]="query()"/>
+} @else {
+<div>Add content later</div>
+}

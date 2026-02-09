@@ -1,11 +1,7 @@
-<app-search (search)="onSearch($event)" [placeholder]="searchForName()" />
+<app-search (search)="onSearch($event)" [searchPlaceholder]="searchForName()" />
 
-@if (players().length === 0) {
-<div class="card text-bg-danger">
-    <div class="card-body">
-        <h5 class="card-title">No results</h5>
-    </div>
-</div>
+@if (players().length === 0 && query()) {
+<app-no-results-found [query]="query()"/>
 } @else {
 <div class="d-flex flex-wrap justify-content-center mt-3">
     @for (player of players(); track player.id) {

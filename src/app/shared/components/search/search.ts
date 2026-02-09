@@ -8,14 +8,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './search.scss',
 })
 export class SearchComponent {
-  placeholder = input('');
+  searchPlaceholder = input('');
   search = output<string>();
   query = '';
 
   submitSearch() {
     const value = this.query.trim();
-    console.log(`searching for ${value}`);
-
     this.search.emit(value);
   }
 }
