@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { PlayerDto } from '../models/playerDto.model';
 import { Observable } from 'rxjs';
 import { Page } from '../models/page.type';
-
+import { PlayerSearchParams } from '../models/filter.type';
 @Injectable({
   providedIn: 'root',
 })
@@ -11,12 +11,7 @@ export class SearchService {
   private baseUrl = 'http://localhost:8080/api/v1/players';
   http = inject(HttpClient);
 
-  search(filters: {
-    name?: string;
-    position?: string;
-    team?: string;
-    nation?: string;
-  }): Observable<Page<PlayerDto>> {
+  search(filters: PlayerSearchParams): Observable<Page<PlayerDto>> {
     let params = new HttpParams();
     params = params.set('page', 0);
     params = params.set('size', 20);

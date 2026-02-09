@@ -2,6 +2,7 @@ import { Component, inject, input, signal } from '@angular/core';
 import { SearchComponent } from '../../shared/components/search/search';
 import { SearchService } from '../../shared/services/search';
 import { PlayerDto } from '../../shared/models/playerDto.model';
+import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 
 @Component({
   selector: 'app-nations',
@@ -12,7 +13,7 @@ import { PlayerDto } from '../../shared/models/playerDto.model';
 export class Nations {
   searchForNation = signal('Search nation...');
   playerService = inject(SearchService);
-  players = signal<PlayerDto[]>([]);
+  players = signal<PlayerSummaryDto[]>([]);
 
   onSearch(nation: string) {
     this.playerService.search({ nation }).subscribe((pageResult) => {
