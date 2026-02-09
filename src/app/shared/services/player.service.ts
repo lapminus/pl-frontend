@@ -7,7 +7,7 @@ import { PlayerSearchParams } from '../models/filter.type';
 @Injectable({
   providedIn: 'root',
 })
-export class SearchService {
+export class PlayerService {
   private baseUrl = 'http://localhost:8080/api/v1/players';
   http = inject(HttpClient);
 
@@ -22,5 +22,9 @@ export class SearchService {
       }
     });
     return this.http.get<Page<PlayerDto>>(this.baseUrl, { params });
+  }
+
+  searchById(playerId: number): Observable<PlayerDto> {
+    return this.http.get<PlayerDto>(this.baseUrl + `/${playerId}`);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { SearchComponent } from '../../shared/components/search/search';
-import { SearchService } from '../../shared/services/search';
+import { PlayerService } from '../../shared/services/player.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
@@ -16,7 +16,7 @@ export class Players implements OnInit {
   searchForName = signal('Search player...');
   query = signal('');
 
-  playerService = inject(SearchService);
+  playerService = inject(PlayerService);
   players = signal<PlayerSummaryDto[]>([]);
 
   ngOnInit(): void {

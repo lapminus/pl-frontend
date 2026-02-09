@@ -1,7 +1,7 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { SearchComponent } from '../../shared/components/search/search';
 import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
-import { SearchService } from '../../shared/services/search';
+import { PlayerService } from '../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 
 @Component({
@@ -14,7 +14,7 @@ export class Positions {
   searchForPosition = signal('Search position...');
   query = signal('');
 
-  playerService = inject(SearchService);
+  playerService = inject(PlayerService);
   players = signal<PlayerSummaryDto[]>([]);
 
   onSearch(position: string) {

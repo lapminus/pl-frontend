@@ -1,6 +1,6 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { SearchComponent } from '../../shared/components/search/search';
-import { SearchService } from '../../shared/services/search';
+import { PlayerService } from '../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 import { NoResultsFound } from '../../shared/components/no-results-found/no-results-found';
 
@@ -12,7 +12,7 @@ import { NoResultsFound } from '../../shared/components/no-results-found/no-resu
 })
 export class Nations {
   searchForNation = signal('Search nation...');
-  playerService = inject(SearchService);
+  playerService = inject(PlayerService);
 
   query = signal('');
   players = signal<PlayerSummaryDto[]>([]);
