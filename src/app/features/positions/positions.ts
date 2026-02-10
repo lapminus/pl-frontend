@@ -19,7 +19,7 @@ export class Positions {
 
   receiveSearch(position: string) {
     this.sendingQuery.set(position);
-    this.playerService.search({ position }).subscribe((pageResult) => {
+    this.playerService.searchPlayersBy({ position }).subscribe((pageResult) => {
       this.players.set(pageResult.content);
     });
   }

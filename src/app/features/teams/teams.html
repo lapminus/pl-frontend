@@ -1,7 +1,15 @@
 <app-shared-search (searchSubmitted)="receiveSearch($event)" [receivedPlaceholder]="sendingPlaceholder()" />
 
-@if (players().length === 0 && sendingQuery()) {
+@if (filteredBySearch().length === 0) {
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
-<div>Add content later</div>
+<div class="d-flex flex-wrap justify-content-center mt-3">
+    @for (team of filteredBySearch(); track team) {
+    <a [routerLink]="['/player', team]" class="card player-card text-decoration-none text-dark m-2">
+        <div class="card-body">
+            <h5 class="card-title">{{ team ?? '-'}}</h5>
+        </div>
+    </a>
+    }
+</div>
 }

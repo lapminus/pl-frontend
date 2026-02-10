@@ -25,7 +25,7 @@ export class PlayerDetail implements OnInit {
     this.sendingQuery.set(playerId);
 
     if (playerId) {
-      this.playerService.searchById(playerId).subscribe({
+      this.playerService.searchPlayerById(playerId).subscribe({
         next: (p) => {
           this.player.set(p);
         },

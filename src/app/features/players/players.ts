@@ -20,14 +20,14 @@ export class Players implements OnInit {
   players = signal<PlayerSummaryDto[]>([]);
 
   ngOnInit(): void {
-    this.playerService.search({}).subscribe((pageResult) => {
+    this.playerService.searchPlayersBy({}).subscribe((pageResult) => {
       this.players.set(pageResult.content);
     });
   }
 
   receiveSearch(name: string) {
     this.sendingQuery.set(name);
-    this.playerService.search({ name }).subscribe((pageResult) => {
+    this.playerService.searchPlayersBy({ name }).subscribe((pageResult) => {
       console.log('HTTP response:', JSON.stringify(pageResult, null, 2));
       this.players.set(pageResult.content);
     });

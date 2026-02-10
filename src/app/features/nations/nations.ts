@@ -19,7 +19,7 @@ export class Nations {
 
   receiveSearch(nation: string) {
     this.sendingQuery.set(nation);
-    this.playerService.search({ nation }).subscribe((pageResult) => {
+    this.playerService.searchPlayersBy({ nation }).subscribe((pageResult) => {
       console.log('HTTP response: ', JSON.stringify(pageResult, null, 2));
       this.players.set(pageResult.content);
     });

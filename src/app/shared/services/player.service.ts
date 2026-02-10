@@ -9,9 +9,11 @@ import { PlayerSearchParams } from '../models/filter.type';
 })
 export class PlayerService {
   private baseUrl = 'http://localhost:8080/api/v1/players';
+  private teams = '/teams';
+
   http = inject(HttpClient);
 
-  search(filters: PlayerSearchParams): Observable<Page<PlayerDto>> {
+  searchPlayersBy(filters: PlayerSearchParams): Observable<Page<PlayerDto>> {
     let params = new HttpParams();
     params = params.set('page', 0);
     params = params.set('size', 20);
@@ -24,7 +26,11 @@ export class PlayerService {
     return this.http.get<Page<PlayerDto>>(this.baseUrl, { params });
   }
 
-  searchById(playerId: number): Observable<PlayerDto> {
+  searchPlayerById(playerId: number): Observable<PlayerDto> {
     return this.http.get<PlayerDto>(this.baseUrl + `/${playerId}`);
+  }
+
+  getAllTeamNames(): Observable<string[]> {
+    return this.http.get<string[]>(this.baseUrl + this.teams);
   }
 }
