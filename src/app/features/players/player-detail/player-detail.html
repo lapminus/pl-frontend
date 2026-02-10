@@ -1,5 +1,14 @@
 @let p = player();
-@if (p) {
+@if (isLoading()) {
+<p>Loading...</p>
+}
+@else if (hasError()) {
+<p>Some error has occured.</p>
+}
+@else if (p === null) {
+<app-shared-no-results-found [receivedQuery]="sendingQuery()" />
+}
+@else {
 <div class="d-flex justify-content-center">
     <div class="card w-50">
         <div class="card-body">
@@ -16,6 +25,4 @@
         </div>
     </div>
 </div>
-} @else if (p === null) {
-<app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 }

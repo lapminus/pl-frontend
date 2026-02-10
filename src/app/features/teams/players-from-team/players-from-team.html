@@ -1,4 +1,10 @@
-@if (players().length === 0 && sendingQuery()) {
+@if (isLoading()) {
+<p>Loading...</p>
+}
+@else if (hasError()) {
+<p>Some kind of error has occured.</p>
+}
+@else if (players().length === 0) {
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
 <div class="d-flex flex-wrap justify-content-center mt-3">

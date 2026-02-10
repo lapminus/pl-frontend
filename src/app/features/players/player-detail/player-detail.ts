@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
 import { KeyValuePipe } from '@angular/common';
 import { SharedNoResultsFound } from '../../../shared/components/shared-no-results-found/shared-no-results-found';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-player-detail',
@@ -16,7 +17,9 @@ export class PlayerDetail implements OnInit {
   route = inject(ActivatedRoute);
 
   sendingQuery = signal<string | number>('');
-  player = signal<PlayerDto | null | undefined>(undefined);
+  isLoading = signal<boolean>(true);
+  hasError = signal<boolean>(false);
+  player = signal<PlayerDto | null>(null);
 
   excludeFields = ['playerName', 'id'];
 
@@ -24,17 +27,12 @@ export class PlayerDetail implements OnInit {
     const playerId = Number(this.route.snapshot.paramMap.get('id'));
     this.sendingQuery.set(playerId);
 
-    if (playerId) {
-      this.playerService.searchPlayerById(playerId).subscribe({
-        next: (p) => {
-          this.player.set(p);
-        },
-        error: (err) => {
-          this.player.set(null);
-        },
+    this.playerService
+      .searchPlayerById(playerId)
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe({
+        next: (res) => this.player.set(res),
+        error: () => this.hasError.set(true),
       });
-    } else {
-      this.player.set(null);
-    }
   }
 }

@@ -4,6 +4,7 @@ import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../../shared/models/playerSummaryDto.model';
 import { SharedNoResultsFound } from '../../../shared/components/shared-no-results-found/shared-no-results-found';
 import { CommonModule } from '@angular/common';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-players-from-team',
@@ -15,15 +16,21 @@ export class PlayersFromTeam implements OnInit {
   playerService = inject(PlayerService);
   route = inject(ActivatedRoute);
 
+  isLoading = signal(true);
+  hasError = signal(false);
   sendingQuery = signal('');
   players = signal<PlayerSummaryDto[]>([]);
 
   ngOnInit(): void {
     const team = this.route.snapshot.paramMap.get('teamName') ?? undefined;
     this.sendingQuery.set(String(team));
-    console.log(team);
-    this.playerService.searchPlayersBy({ team }).subscribe((result) => {
-      this.players.set(result.content);
-    });
+
+    this.playerService
+      .searchPlayersBy({ team })
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe({
+        next: (result) => this.players.set(result.content),
+        error: () => this.hasError.set(true),
+      });
   }
 }
