@@ -11,6 +11,8 @@ export class PlayerService {
   private baseUrl = 'http://localhost:8080/api/v1/players';
   private teams = '/teams';
   private nations = '/nations';
+  private positions = '/positions';
+
   http = inject(HttpClient);
 
   searchPlayersBy(filters: PlayerSearchParams): Observable<Page<PlayerDto>> {
@@ -36,5 +38,9 @@ export class PlayerService {
 
   getAllNations(): Observable<string[]> {
     return this.http.get<string[]>(this.baseUrl + this.nations);
+  }
+
+  getAllPositions(): Observable<string[]> {
+    return this.http.get<string[]>(this.baseUrl + this.positions);
   }
 }
