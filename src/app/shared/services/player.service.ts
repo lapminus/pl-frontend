@@ -10,7 +10,7 @@ import { PlayerSearchParams } from '../models/filter.type';
 export class PlayerService {
   private baseUrl = 'http://localhost:8080/api/v1/players';
   private teams = '/teams';
-
+  private nations = '/nations';
   http = inject(HttpClient);
 
   searchPlayersBy(filters: PlayerSearchParams): Observable<Page<PlayerDto>> {
@@ -32,5 +32,9 @@ export class PlayerService {
 
   getAllTeamNames(): Observable<string[]> {
     return this.http.get<string[]>(this.baseUrl + this.teams);
+  }
+
+  getAllNations(): Observable<string[]> {
+    return this.http.get<string[]>(this.baseUrl + this.nations);
   }
 }
