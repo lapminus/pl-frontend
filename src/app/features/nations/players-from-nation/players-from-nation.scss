@@ -1,11 +1,8 @@
-.team-card {
-  background-color: rgb(47, 156, 76);
-  width: 200px;
-  height: 120px;
+.player-card {
+  width: 250px;
   border-radius: 0.75rem;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
   overflow: hidden;
 
   &:hover {
@@ -36,3 +33,9 @@
     opacity: 1;
   }
 }
+
+.unknown-pos {background-color: #e45a5a;}
+.fw {background-color: #ffcccc;}
+.mf {background-color: #ccccff;}
+.df {background-color: #fff3cc;}
+.gk {background-color: #ccffcc;}

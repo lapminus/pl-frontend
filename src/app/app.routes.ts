@@ -35,6 +35,14 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'nation/:nation',
+    loadComponent: () => {
+      return import('./features/nations/players-from-nation/players-from-nation').then(
+        (m) => m.PlayersFromNation,
+      );
+    },
+  },
+  {
     path: 'nations',
     loadComponent: () => {
       return import('./features/nations/nations').then((m) => m.Nations);
