@@ -49,6 +49,14 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'position/:position',
+    loadComponent: () => {
+      return import('./features/positions/players-from-position/players-from-position').then(
+        (m) => m.PlayersFromPosition,
+      );
+    },
+  },
+  {
     path: 'positions',
     loadComponent: () => {
       return import('./features/positions/positions').then((m) => m.Positions);
