@@ -8,7 +8,7 @@ import { SharedNoResultsFound } from '../../shared/components/shared-no-results-
 
 @Component({
   selector: 'app-players',
-  imports: [SharedSearch, CommonModule, SharedNoResultsFound, RouterLink],
+  imports: [SharedSearch, CommonModule, RouterLink, SharedNoResultsFound],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })

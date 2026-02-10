@@ -17,8 +17,14 @@ export const routes: Routes = [
   {
     path: 'player/:id',
     loadComponent: () => {
-      return import('./features/players/player-detail/player-detail').then(
-        (m) => m.PlayerDetail,
+      return import('./features/players/player-detail/player-detail').then((m) => m.PlayerDetail);
+    },
+  },
+  {
+    path: 'team/:teamName',
+    loadComponent: () => {
+      return import('./features/teams/players-from-team/players-from-team').then(
+        (m) => m.PlayersFromTeam,
       );
     },
   },
