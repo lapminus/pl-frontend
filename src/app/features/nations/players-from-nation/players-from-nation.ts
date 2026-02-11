@@ -1,14 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../../shared/models/playerSummaryDto.model';
 import { finalize } from 'rxjs';
 import { SharedNoResultsFound } from '../../../shared/components/shared-no-results-found/shared-no-results-found';
-import { CommonModule } from '@angular/common';
+import { SharedPlayerSummary } from '../../../shared/components/shared-player-summary/shared-player-summary';
 
 @Component({
   selector: 'app-players-from-nation',
-  imports: [SharedNoResultsFound, RouterLink, CommonModule],
+  imports: [SharedNoResultsFound, SharedPlayerSummary],
   templateUrl: './players-from-nation.html',
   styleUrl: './players-from-nation.scss',
 })

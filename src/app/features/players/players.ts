@@ -1,14 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { SharedSearch } from '../../shared/components/shared-search/shared-search';
 import { PlayerService } from '../../shared/services/player.service';
-import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
+import { SharedPlayerSummary } from '../../shared/components/shared-player-summary/shared-player-summary';
 
 @Component({
   selector: 'app-players',
-  imports: [SharedSearch, CommonModule, RouterLink, SharedNoResultsFound],
+  imports: [SharedSearch, SharedNoResultsFound, SharedPlayerSummary],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })
