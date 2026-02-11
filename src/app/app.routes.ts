@@ -17,7 +17,9 @@ export const routes: Routes = [
   {
     path: 'player/:id',
     loadComponent: () => {
-      return import('./features/players/player-detail/player-detail').then((m) => m.PlayerDetail);
+      return import('./shared/components/shared-player-detail/shared-player-detail').then(
+        (m) => m.SharedPlayerDetail,
+      );
     },
   },
   {

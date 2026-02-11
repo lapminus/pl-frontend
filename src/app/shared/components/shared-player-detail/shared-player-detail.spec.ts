@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayerDetail } from './player-detail';
+import { SharedPlayerDetail } from './shared-player-detail';
 
-describe('PlayerDetail', () => {
-  let component: PlayerDetail;
-  let fixture: ComponentFixture<PlayerDetail>;
+describe('SharedPlayerDetail', () => {
+  let component: SharedPlayerDetail;
+  let fixture: ComponentFixture<SharedPlayerDetail>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PlayerDetail]
+      imports: [SharedPlayerDetail]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PlayerDetail);
+    fixture = TestBed.createComponent(SharedPlayerDetail);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
