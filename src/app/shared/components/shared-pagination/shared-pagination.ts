@@ -1,13 +1,13 @@
 import { Component, effect, input, OnInit, output, signal } from '@angular/core';
-import { PageItem } from '../../../shared/models/page-item.type';
+import { PageItem } from '../../models/page-item.type';
 
 @Component({
-  selector: 'app-pagination',
+  selector: 'app-shared-pagination',
   imports: [],
-  templateUrl: './pagination.html',
-  styleUrl: './pagination.scss',
+  templateUrl: './shared-pagination.html',
+  styleUrl: './shared-pagination.scss',
 })
-export class Pagination {
+export class SharedPagination {
   // 0 = 1
   receivedMaxPages = input.required<number>();
   receivedCurrentPage = input.required<number>();

@@ -5,5 +5,5 @@
 } @else {
 <app-shared-player-summary [receivedPlayers]="sendingPlayers()" />
 }
-<app-pagination [receivedMaxPages]="sendingPages()" [receivedCurrentPage]="sendingCurrentPage()"
+<app-shared-pagination [receivedMaxPages]="sendingPages()" [receivedCurrentPage]="sendingCurrentPage()"
     (pageChanged)="receivePageChanged($event)" />
