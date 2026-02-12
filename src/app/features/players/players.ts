@@ -32,8 +32,10 @@ export class Players implements OnInit {
   receiveSearch(name: string) {
     this.sendingQuery.set(name);
     this.playerService.searchPlayersBy({ name }).subscribe((pageResult) => {
-      console.log('HTTP response:', JSON.stringify(pageResult, null, 2));
+      // console.log('HTTP response:', JSON.stringify(pageResult, null, 2));
       this.sendingPlayers.set(pageResult.content);
+      this.sendingPages.set(pageResult.totalPages);
+      this.sendingCurrentPage.set(pageResult.number);
     });
   }
 

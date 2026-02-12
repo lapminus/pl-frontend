@@ -33,7 +33,7 @@ export class Pagination {
 
       this.before.set([{ type: 'elipsis' }, ...pages]);
 
-      console.log(`yes (...) ${this.before().forEach((x) => console.log(x))}`);
+      // console.log(`yes (...) ${this.before().forEach((x) => console.log(x))}`);
     } else {
       this.before.set(
         this.range(2, this.receivedCurrentPage() + 1).map(
@@ -41,7 +41,7 @@ export class Pagination {
         ),
       );
 
-      console.log(`no (...) ${this.before().forEach((x) => console.log(x))}`);
+      // console.log(`no (...) ${this.before().forEach((x) => console.log(x))}`);
     }
   }
 
@@ -76,6 +76,7 @@ export class Pagination {
     this.pageChanged.emit(value);
   }
 
+  // range = [a,b)
   private range(start: number, end: number): number[] {
     return Array.from({ length: end - start }, (_, i) => start + i);
   }

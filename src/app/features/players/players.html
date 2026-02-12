@@ -3,7 +3,6 @@
 @if (sendingPlayers().length === 0 && sendingQuery()) {
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
-<!-- send players here with pagination to know what page to display-->
 <app-shared-player-summary [receivedPlayers]="sendingPlayers()" />
 }
 <app-pagination [receivedMaxPages]="sendingPages()" [receivedCurrentPage]="sendingCurrentPage()"
