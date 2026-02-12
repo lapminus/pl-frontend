@@ -10,6 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './shared-player-summary.scss',
 })
 export class SharedPlayerSummary {
-  receivedPlayer = input.required<PlayerSummaryDto[]>();
+  receivedPlayers = input.required<PlayerSummaryDto[]>();
 
 }

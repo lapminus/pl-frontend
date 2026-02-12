@@ -1,5 +1,5 @@
 <div class="d-flex flex-wrap justify-content-center mt-3">
-    @for (player of receivedPlayer(); track player.id) {
+    @for (player of receivedPlayers(); track player.id) {
     <a [routerLink]="['/player', player.id]" class="card player-card text-decoration-none text-dark m-2"
         [ngClass]="player.pos ? player.pos.toLowerCase() : 'unknown-pos'">
         <div class="card-body">
