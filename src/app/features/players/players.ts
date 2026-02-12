@@ -25,8 +25,6 @@ export class Players implements OnInit {
     this.playerService.searchPlayersBy({}).subscribe((pageResult) => {
       this.sendingPlayers.set(pageResult.content);
       this.sendingPages.set(pageResult.totalPages);
-      console.log(`#of pages sent: ${this.sendingPages()}`)
-
       this.sendingCurrentPage.set(pageResult.number);
     });
   }
@@ -41,5 +39,6 @@ export class Players implements OnInit {
 
   receivePageChanged(page: number) {
     this.sendingCurrentPage.set(page);
+    console.log(`pageChanged to: ${page}`)
   }
 }

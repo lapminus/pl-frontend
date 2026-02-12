@@ -72,6 +72,10 @@ export class Pagination {
     this.pageChanged.emit(this.receivedCurrentPage() - 1);
   }
 
+  clicked(value: number) {
+    this.pageChanged.emit(value);
+  }
+
   private range(start: number, end: number): number[] {
     return Array.from({ length: end - start }, (_, i) => start + i);
   }
