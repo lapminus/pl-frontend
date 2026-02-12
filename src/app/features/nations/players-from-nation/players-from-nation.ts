@@ -44,9 +44,11 @@ export class PlayersFromNation implements OnInit {
   }
 
   receivePageChanged(page: number) {
-    this.playerService.searchPlayersBy({ page }).subscribe((pageResult) => {
-      this.sendingPlayers.set(pageResult.content);
-      this.sendingCurrentPage.set(pageResult.number);
-    });
+    this.playerService
+      .searchPlayersBy({ nation: this.sendingQuery(), page })
+      .subscribe((pageResult) => {
+        this.sendingPlayers.set(pageResult.content);
+        this.sendingCurrentPage.set(pageResult.number);
+      });
   }
 }
