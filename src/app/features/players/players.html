@@ -4,6 +4,6 @@
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
 <app-shared-player-summary [receivedPlayers]="sendingPlayers()" />
-}
 <app-shared-pagination [receivedMaxPages]="sendingPages()" [receivedCurrentPage]="sendingCurrentPage()"
     (pageChanged)="receivePageChanged($event)" />
+}

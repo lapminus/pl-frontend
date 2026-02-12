@@ -13,11 +13,12 @@ import { SharedPagination } from '../../shared/components/shared-pagination/shar
   styleUrl: './players.scss',
 })
 export class Players implements OnInit {
+  playerService = inject(PlayerService);
+
   sendingPlaceholder = signal('Search player...');
   sendingQuery = signal('');
-
-  playerService = inject(PlayerService);
   sendingPlayers = signal<PlayerSummaryDto[]>([]);
+
   sendingPages = signal<number>(0);
   sendingCurrentPage = signal<number>(0);
 

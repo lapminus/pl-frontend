@@ -5,10 +5,11 @@ import { PlayerSummaryDto } from '../../../shared/models/playerSummaryDto.model'
 import { finalize } from 'rxjs';
 import { SharedNoResultsFound } from '../../../shared/components/shared-no-results-found/shared-no-results-found';
 import { SharedPlayerSummary } from '../../../shared/components/shared-player-summary/shared-player-summary';
+import { SharedPagination } from '../../../shared/components/shared-pagination/shared-pagination';
 
 @Component({
   selector: 'app-players-from-nation',
-  imports: [SharedNoResultsFound, SharedPlayerSummary],
+  imports: [SharedNoResultsFound, SharedPlayerSummary, SharedPagination],
   templateUrl: './players-from-nation.html',
   styleUrl: './players-from-nation.scss',
 })
@@ -20,7 +21,10 @@ export class PlayersFromNation implements OnInit {
   hasError = signal(false);
 
   sendingQuery = signal('');
-  players = signal<PlayerSummaryDto[]>([]);
+  sendingPlayers = signal<PlayerSummaryDto[]>([]);
+
+  sendingPages = signal<number>(0);
+  sendingCurrentPage = signal<number>(0);
 
   ngOnInit(): void {
     const nation = this.route.snapshot.paramMap.get('nation') ?? undefined;
@@ -30,8 +34,19 @@ export class PlayersFromNation implements OnInit {
       .searchPlayersBy({ nation })
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: (results) => this.players.set(results.content),
+        next: (results) => {
+          (this.sendingPlayers.set(results.content),
+            this.sendingPages.set(results.totalPages),
+            this.sendingCurrentPage.set(results.number));
+        },
         error: () => this.hasError.set(true),
       });
+  }
+
+  receivePageChanged(page: number) {
+    this.playerService.searchPlayersBy({ page }).subscribe((pageResult) => {
+      this.sendingPlayers.set(pageResult.content);
+      this.sendingCurrentPage.set(pageResult.number);
+    });
   }
 }
