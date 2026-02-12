@@ -22,7 +22,7 @@ export class Players implements OnInit {
   sendingCurrentPage = signal<number>(0);
 
   ngOnInit(): void {
-    this.playerService.searchPlayersBy({}).subscribe((pageResult) => {
+    this.playerService.searchPlayersBy({ page: 0 }).subscribe((pageResult) => {
       this.sendingPlayers.set(pageResult.content);
       this.sendingPages.set(pageResult.totalPages);
       this.sendingCurrentPage.set(pageResult.number);
@@ -38,7 +38,9 @@ export class Players implements OnInit {
   }
 
   receivePageChanged(page: number) {
-    this.sendingCurrentPage.set(page);
-    console.log(`pageChanged to: ${page}`)
+    this.playerService.searchPlayersBy({ page }).subscribe((pageResult) => {
+      this.sendingPlayers.set(pageResult.content);
+      this.sendingCurrentPage.set(pageResult.number);
+    });
   }
 }

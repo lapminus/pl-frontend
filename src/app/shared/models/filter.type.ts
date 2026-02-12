@@ -3,4 +3,6 @@ export type PlayerSearchParams = {
   position?: string;
   nation?: string;
   team?: string;
+  page?: number
+  size?: number
 };

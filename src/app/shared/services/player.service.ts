@@ -17,8 +17,8 @@ export class PlayerService {
 
   searchPlayersBy(filters: PlayerSearchParams): Observable<Page<PlayerDto>> {
     let params = new HttpParams();
-    params = params.set('page', 0);
-    params = params.set('size', 20);
+    params = params.set('page', filters.page ?? 0);
+    params = params.set('size', filters.size ?? 20);
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
