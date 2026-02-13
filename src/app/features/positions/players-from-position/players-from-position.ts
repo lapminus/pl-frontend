@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { PlayerSummaryDto } from '../../../shared/models/playerSummaryDto.model';
 import { finalize } from 'rxjs';
 import { SharedNoResultsFound } from '../../../shared/components/shared-no-results-found/shared-no-results-found';
-import { SharedPlayerSummary } from "../../../shared/components/shared-player-summary/shared-player-summary";
+import { SharedPlayerSummary } from '../../../shared/components/shared-player-summary/shared-player-summary';
+import { SharedPagination } from '../../../shared/components/shared-pagination/shared-pagination';
 
 @Component({
   selector: 'app-players-from-position',
-  imports: [SharedNoResultsFound, SharedPlayerSummary],
+  imports: [SharedNoResultsFound, SharedPlayerSummary, SharedPagination],
   templateUrl: './players-from-position.html',
   styleUrl: './players-from-position.scss',
 })
@@ -18,8 +19,12 @@ export class PlayersFromPosition implements OnInit {
 
   isLoading = signal(true);
   hasError = signal(false);
-  players = signal<PlayerSummaryDto[]>([]);
+
+  sendingPlayers = signal<PlayerSummaryDto[]>([]);
   sendingQuery = signal('');
+
+  sendingPages = signal<number>(0);
+  sendingCurrentPage = signal<number>(0);
 
   ngOnInit(): void {
     const position = this.route.snapshot.paramMap.get('position') ?? undefined;
@@ -29,8 +34,21 @@ export class PlayersFromPosition implements OnInit {
       .searchPlayersBy({ position })
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: (result) => this.players.set(result.content),
+        next: (result) => {
+          (this.sendingPlayers.set(result.content),
+            this.sendingPages.set(result.totalPages),
+            this.sendingCurrentPage.set(result.number));
+        },
         error: () => this.hasError.set(true),
+      });
+  }
+
+  receivePageChanged(page: number) {
+    this.playerService
+      .searchPlayersBy({ position: this.sendingQuery(), page })
+      .subscribe((pageResult) => {
+        (this.sendingPlayers.set(pageResult.content),
+          this.sendingCurrentPage.set(pageResult.number));
       });
   }
 }
