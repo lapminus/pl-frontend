@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../../shared/models/playerSummaryDto.model';
 import { finalize } from 'rxjs';
@@ -16,6 +16,7 @@ import { SharedPagination } from '../../../shared/components/shared-pagination/s
 export class PlayersFromNation implements OnInit {
   playerService = inject(PlayerService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
 
   isLoading = signal(true);
   hasError = signal(false);
@@ -27,28 +28,31 @@ export class PlayersFromNation implements OnInit {
   sendingCurrentPage = signal<number>(0);
 
   ngOnInit(): void {
-    const nation = this.route.snapshot.paramMap.get('nation') ?? undefined;
-    this.sendingQuery.set(String(nation));
+    this.route.queryParamMap.subscribe((params) => {
+      const page = Number(params.get('page'));
+      const nation = this.route.snapshot.paramMap.get('nation') ?? undefined;
 
-    this.playerService
-      .searchPlayersBy({ nation })
-      .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe({
-        next: (results) => {
-          (this.sendingPlayers.set(results.content),
-            this.sendingPages.set(results.totalPages),
-            this.sendingCurrentPage.set(results.number));
-        },
-        error: () => this.hasError.set(true),
-      });
+      this.sendingQuery.set(`${nation}?page=${page}`);
+
+      this.playerService
+        .searchPlayersBy({ nation, page })
+        .pipe(finalize(() => this.isLoading.set(false)))
+        .subscribe({
+          next: (results) => {
+            (this.sendingPlayers.set(results.content),
+              this.sendingPages.set(results.totalPages),
+              this.sendingCurrentPage.set(results.number));
+          },
+          error: () => this.hasError.set(true),
+        });
+    });
   }
 
   receivePageChanged(page: number) {
-    this.playerService
-      .searchPlayersBy({ nation: this.sendingQuery(), page })
-      .subscribe((pageResult) => {
-        this.sendingPlayers.set(pageResult.content);
-        this.sendingCurrentPage.set(pageResult.number);
-      });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page },
+      queryParamsHandling: 'replace',
+    });
   }
 }
