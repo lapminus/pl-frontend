@@ -15,13 +15,13 @@ export class CreatePlayer {
 
   openCreatePlayerModal() {
     this.isModalOpen.set(true);
-    // document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; // Probably not best practice
   }
 
   closeCreatePlayerModal() {
     this.isModalOpen.set(false);
     this.newPlayer = {};
-    // document.body.style.overflow = 'visible';
+    document.body.style.overflow = 'visible';
   }
 
   submitCreatePlayer() {
