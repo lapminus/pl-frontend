@@ -1,4 +1,5 @@
 <app-shared-search (searchSubmitted)="receiveSearch($event)" [receivedPlaceholder]="sendingPlaceholder()" />
+<app-create-player />
 
 @if (sendingPlayers().length === 0 && sendingQuery()) {
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />

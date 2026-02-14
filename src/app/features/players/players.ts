@@ -5,10 +5,11 @@ import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 import { SharedPlayerSummary } from '../../shared/components/shared-player-summary/shared-player-summary';
 import { SharedPagination } from '../../shared/components/shared-pagination/shared-pagination';
+import { CreatePlayer } from "./create-player/create-player";
 
 @Component({
   selector: 'app-players',
-  imports: [SharedSearch, SharedNoResultsFound, SharedPlayerSummary, SharedPagination],
+  imports: [SharedSearch, SharedNoResultsFound, SharedPlayerSummary, SharedPagination, CreatePlayer],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })
