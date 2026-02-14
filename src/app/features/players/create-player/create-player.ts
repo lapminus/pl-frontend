@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { PlayerSummaryDto } from '../../../shared/models/playerSummaryDto.model';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { PlayerService } from '../../../shared/services/player.service';
+import { PlayerDto } from '../../../shared/models/playerDto.model';
 
 @Component({
   selector: 'app-create-player',
@@ -9,9 +10,10 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './create-player.scss',
 })
 export class CreatePlayer {
+  playerService = inject(PlayerService);
   isModalOpen = signal(false);
 
-  newPlayer: Partial<PlayerSummaryDto> = {};
+  newPlayer: Partial<PlayerDto> = {};
 
   openCreatePlayerModal() {
     this.isModalOpen.set(true);
@@ -25,9 +27,13 @@ export class CreatePlayer {
   }
 
   submitCreatePlayer() {
-    console.log(`Created player: ${JSON.stringify(this.newPlayer, null, 2)}`);
-
-    // call player service
-    this.closeCreatePlayerModal();
+    this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
+      next: (createdPlayer) => {
+        (console.log(`Created player: ${JSON.stringify(createdPlayer, null, 2)}`),
+          (this.newPlayer = {}),
+          this.closeCreatePlayerModal());
+      },
+      error: (error) => console.log(`Failed to create player: ${JSON.stringify(error, null, 2)}`),
+    });
   }
 }
