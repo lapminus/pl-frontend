@@ -13,11 +13,15 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">Name</label>
-                    <input class="form-control" [(ngModel)]="newPlayer.playerName" name="playerName">
+                    <input class="form-control" [(ngModel)]="newPlayer.playerName" name="playerName"
+                        [class.is-invalid]="formErrors()['playerName']">
+                    <div class="invalid-feedback">{{formErrors()['playerName']}}</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Position</label>
-                    <input class="form-control" [(ngModel)]="newPlayer.pos" name="pos">
+                    <input class="form-control" [(ngModel)]="newPlayer.pos" name="pos"
+                        [class.is-invalid]="formErrors()['pos']">
+                    <div class="invalid-feedback">{{formErrors()['pos']}}</div>
                 </div>
                 <button class="btn btn-success" (click)="submitCreatePlayer()">Create</button>
             </div>
