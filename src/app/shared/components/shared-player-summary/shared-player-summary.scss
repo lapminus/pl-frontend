@@ -1,8 +1,10 @@
-.player-card {
+.player-card-wrapper {
   width: 250px;
   border-radius: 0.75rem;
   text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   overflow: hidden;
 
   &:hover {
@@ -32,10 +34,40 @@
   &:hover .hover-overlay {
     opacity: 1;
   }
+
+  .delete-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: white;
+    background: rgba(255, 0, 0, 0.3);
+    border: none;
+    border-radius: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background: red;
+    }
+  }
 }
 
-.unknown-pos {background-color: #e45a5a;}
-.fw {background-color: #ffcccc;}
-.mf {background-color: #ccccff;}
-.df {background-color: #fff3cc;}
-.gk {background-color: #ccffcc;}
+.unknown-pos {
+  background-color: #e45a5a;
+}
+.fw {
+  background-color: #ffcccc;
+}
+.mf {
+  background-color: #ccccff;
+}
+.df {
+  background-color: #fff3cc;
+}
+.gk {
+  background-color: #ccffcc;
+}

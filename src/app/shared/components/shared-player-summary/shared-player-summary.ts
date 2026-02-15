@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { PlayerSummaryDto } from '../../models/playerSummaryDto.model';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,4 +12,7 @@ import { CommonModule } from '@angular/common';
 export class SharedPlayerSummary {
   receivedPlayers = input.required<PlayerSummaryDto[]>();
 
+  deletePlayer(playerId: number) {
+    console.log(`deleted player: ${playerId}`);
+  }
 }
