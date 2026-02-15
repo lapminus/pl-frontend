@@ -74,4 +74,8 @@ export class Players implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+  onPlayerDeleted(playerId: number) {
+    this.sendingPlayers.set(this.sendingPlayers().filter((p) => p.id !== playerId));
+  }
 }

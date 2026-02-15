@@ -44,13 +44,11 @@ export class PlayerService {
     return this.http.get<string[]>(this.baseUrl + this.positions);
   }
 
-  // @PostMapping
-  // public ResponseEntity<PlayerDto> createPlayer(
-  //         @Valid @RequestBody PlayerDto dto) {
-  //     Player player = playerService.createPlayer(playerMapper.toEntity(dto));
-  //     return new ResponseEntity<>(playerMapper.toDto(player), HttpStatus.CREATED);
-  // }
   createPlayer(dto: PlayerDto): Observable<PlayerDto> {
     return this.http.post<PlayerDto>(this.baseUrl, dto);
+  }
+
+  deletePlayer(playerId: number): Observable<void> {
+    return this.http.delete<void>(this.baseUrl + `/${playerId}`);
   }
 }

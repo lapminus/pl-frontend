@@ -1,7 +1,8 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { PlayerSummaryDto } from '../../models/playerSummaryDto.model';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-shared-player-summary',
@@ -10,9 +11,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './shared-player-summary.scss',
 })
 export class SharedPlayerSummary {
+  playerService = inject(PlayerService);
   receivedPlayers = input.required<PlayerSummaryDto[]>();
+  playerDeleted = output<number>();
 
-  deletePlayer(playerId: number) {
-    console.log(`deleted player: ${playerId}`);
+  clickedDelete(playerId: number) {
+    this.playerService.deletePlayer(playerId).subscribe({
+      next: () => {
+        console.log('player deleted successfully');
+        this.playerDeleted.emit(playerId);
+      },
+      error: (err) => console.log(`Could not delete ${err}`),
+    });
   }
 }
