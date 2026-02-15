@@ -86,7 +86,8 @@ export class CreatePlayer implements OnInit {
 
   handleNations() {
     this.playerService.getAllNations().subscribe((result) => {
-      this.nations.set(result);
+      const displayName = result.filter((item) => item !== null).sort();
+      this.nations.set(displayName);
     });
   }
 }

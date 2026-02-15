@@ -21,8 +21,9 @@ export class Nations implements OnInit {
 
   ngOnInit(): void {
     this.playerService.getAllNations().subscribe((result) => {
-      this.nations.set(result);
-      this.filteredBySearch.set(result);
+      const displayNames = result.filter((item) => item !== null).map((item) => item.split(' ')[1]);
+      this.nations.set(displayNames);
+      this.filteredBySearch.set(displayNames);
     });
   }
 
