@@ -24,7 +24,7 @@ export class CreatePlayer implements OnInit {
   showMoreStats = signal(false);
 
   ngOnInit(): void {
-    this.handleNations();
+    this.displayNations();
   }
 
   openCreatePlayerModal() {
@@ -84,7 +84,7 @@ export class CreatePlayer implements OnInit {
     });
   }
 
-  handleNations() {
+  private displayNations() {
     this.playerService.getAllNations().subscribe((result) => {
       const displayName = result.filter((item) => item !== null).sort();
       this.nations.set(displayName);
