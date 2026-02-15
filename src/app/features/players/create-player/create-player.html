@@ -25,7 +25,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nation</label>
-                    @for (nation of nations; track nation) {
+                    @for (nation of nations(); track nation) {
                     <div class="form-check">
                         <input class="form-check-input" type="radio" id="nation-{{nation}}"
                             [checked]="newPlayer.nation === nation" (click)="selectNation(nation)">

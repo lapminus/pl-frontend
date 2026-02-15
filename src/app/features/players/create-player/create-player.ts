@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
@@ -11,17 +11,21 @@ import { CommonModule } from '@angular/common';
   templateUrl: './create-player.html',
   styleUrl: './create-player.scss',
 })
-export class CreatePlayer {
+export class CreatePlayer implements OnInit {
   playerService = inject(PlayerService);
   isModalOpen = signal(false);
   formErrors = signal<Record<string, string>>({});
 
   newPlayer: Partial<PlayerDto> = {};
 
-  nations = ['USA', 'ENG', 'FRA', 'GER', 'BRA'];
+  nations = signal<string[]>([]);
   positions = ['MF', 'DF', 'GK', 'FW'];
 
   showMoreStats = signal(false);
+
+  ngOnInit(): void {
+    this.handleNations();
+  }
 
   openCreatePlayerModal() {
     this.isModalOpen.set(true);
@@ -77,6 +81,12 @@ export class CreatePlayer {
           this.formErrors.set({ 'General error': 'Something went wrong.' });
         }
       },
+    });
+  }
+
+  handleNations() {
+    this.playerService.getAllNations().subscribe((result) => {
+      this.nations.set(result);
     });
   }
 }
