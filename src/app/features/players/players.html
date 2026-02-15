@@ -1,7 +1,12 @@
 <app-shared-search (searchSubmitted)="receiveSearch($event)" [receivedPlaceholder]="sendingPlaceholder()" />
 <app-create-player />
-
-@if (sendingPlayers().length === 0 && sendingQuery()) {
+@if (isLoading()) {
+<p>loading...</p>
+}
+@else if (hasError()) {
+<p>Some kind of error has occured.</p>
+}
+@else if (sendingPlayers().length === 0) {
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
 <app-shared-player-summary [receivedPlayers]="sendingPlayers()" />

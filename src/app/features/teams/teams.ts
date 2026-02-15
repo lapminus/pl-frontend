@@ -20,8 +20,11 @@ export class Teams implements OnInit {
 
   ngOnInit(): void {
     this.playerService.getAllTeamNames().subscribe((result) => {
-      this.teamNames.set(result);
-      this.filteredBySearch.set(result);
+      const displayTeams = result.filter((item) => item !== null);
+
+      console.log(result)
+      this.teamNames.set(displayTeams);
+      this.filteredBySearch.set(displayTeams);
     });
   }
 

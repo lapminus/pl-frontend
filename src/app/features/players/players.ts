@@ -5,16 +5,29 @@ import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 import { SharedPlayerSummary } from '../../shared/components/shared-player-summary/shared-player-summary';
 import { SharedPagination } from '../../shared/components/shared-pagination/shared-pagination';
-import { CreatePlayer } from "./create-player/create-player";
+import { CreatePlayer } from './create-player/create-player';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-players',
-  imports: [SharedSearch, SharedNoResultsFound, SharedPlayerSummary, SharedPagination, CreatePlayer],
+  imports: [
+    SharedSearch,
+    SharedNoResultsFound,
+    SharedPlayerSummary,
+    SharedPagination,
+    CreatePlayer,
+  ],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })
 export class Players implements OnInit {
   playerService = inject(PlayerService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  isLoading = signal(true);
+  hasError = signal(false);
 
   sendingPlaceholder = signal('Search player...');
   sendingQuery = signal('');
@@ -24,27 +37,41 @@ export class Players implements OnInit {
   sendingCurrentPage = signal<number>(0);
 
   ngOnInit(): void {
-    this.playerService.searchPlayersBy({ page: 0 }).subscribe((pageResult) => {
-      this.sendingPlayers.set(pageResult.content);
-      this.sendingPages.set(pageResult.totalPages);
-      this.sendingCurrentPage.set(pageResult.number);
+    this.route.queryParamMap.subscribe((params) => {
+      const page = Number(params.get('page'));
+      const name = params.get('playerName') ?? undefined;
+      this.sendingQuery.set(`${name}?page=${page}`);
+
+      this.playerService
+        .searchPlayersBy({ name, page })
+        .pipe(finalize(() => this.isLoading.set(false)))
+        .subscribe({
+          next: (result) => {
+            this.sendingPlayers.set(result.content);
+            this.sendingPages.set(result.totalPages);
+            this.sendingCurrentPage.set(result.number);
+          },
+          error: () => this.hasError.set(true),
+        });
     });
   }
 
   receiveSearch(name: string) {
-    this.sendingQuery.set(name);
-    this.playerService.searchPlayersBy({ name }).subscribe((pageResult) => {
-      // console.log('HTTP response:', JSON.stringify(pageResult, null, 2));
-      this.sendingPlayers.set(pageResult.content);
-      this.sendingPages.set(pageResult.totalPages);
-      this.sendingCurrentPage.set(pageResult.number);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        playerName: name || null,
+        page: 0,
+      },
+      queryParamsHandling: 'merge',
     });
   }
 
   receivePageChanged(page: number) {
-    this.playerService.searchPlayersBy({ page }).subscribe((pageResult) => {
-      this.sendingPlayers.set(pageResult.content);
-      this.sendingCurrentPage.set(pageResult.number);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page },
+      queryParamsHandling: 'merge',
     });
   }
 }
