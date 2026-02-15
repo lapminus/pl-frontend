@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-player',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './create-player.html',
   styleUrl: './create-player.scss',
 })
@@ -17,6 +18,11 @@ export class CreatePlayer {
 
   newPlayer: Partial<PlayerDto> = {};
 
+  nations = ['USA', 'ENG', 'FRA', 'GER', 'BRA'];
+  positions = ['MF', 'DF', 'GK', 'FW'];
+
+  showMoreStats = signal(false);
+
   openCreatePlayerModal() {
     this.isModalOpen.set(true);
     document.body.style.overflow = 'hidden'; // Probably not best practice
@@ -26,7 +32,34 @@ export class CreatePlayer {
     this.isModalOpen.set(false);
     this.newPlayer = {};
     this.formErrors.set({});
+    this.showMoreStats.set(false);
     document.body.style.overflow = 'visible';
+  }
+
+  togglePosition(pos: string) {
+    if (!this.newPlayer.pos) {
+      this.newPlayer.pos = pos;
+    } else {
+      const current = this.newPlayer.pos.split(',');
+      if (current.includes(pos)) {
+        this.newPlayer.pos = current.filter((p) => p !== pos).join(',');
+      } else {
+        current.push(pos);
+        this.newPlayer.pos = current.join(',');
+      }
+    }
+  }
+
+  toggleMoreStats() {
+    this.showMoreStats.update((v) => !v);
+  }
+
+  isPositionSelected(pos: string): boolean {
+    return this.newPlayer.pos?.split(',').includes(pos) ?? false;
+  }
+
+  selectNation(nation: string) {
+    this.newPlayer.nation = nation;
   }
 
   submitCreatePlayer() {
