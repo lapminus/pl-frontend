@@ -17,10 +17,7 @@ export class SharedPlayerSummary {
 
   clickedDelete(playerId: number) {
     this.playerService.deletePlayer(playerId).subscribe({
-      next: () => {
-        console.log('player deleted successfully');
-        this.playerDeleted.emit(playerId);
-      },
+      next: () => this.playerDeleted.emit(playerId),
       error: (err) => console.log(`Could not delete ${err}`),
     });
   }

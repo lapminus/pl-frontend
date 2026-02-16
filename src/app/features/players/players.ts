@@ -9,6 +9,7 @@ import { CreatePlayer } from './create-player/create-player';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { PlayerDto } from '../../shared/models/playerDto.model';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-players',
@@ -24,6 +25,7 @@ import { PlayerDto } from '../../shared/models/playerDto.model';
 })
 export class Players implements OnInit {
   playerService = inject(PlayerService);
+  toastService = inject(ToastService);
   route = inject(ActivatedRoute);
   router = inject(Router);
 
@@ -77,10 +79,15 @@ export class Players implements OnInit {
   }
 
   onPlayerCreated(player: PlayerDto) {
-    this.sendingPlayers.update((players) => [...players, player]);
+    const lastPage = this.sendingPages() - 1;
+    if (this.sendingCurrentPage() === lastPage) {
+      this.sendingPlayers.update((players) => [...players, player]);
+    }
+    this.toastService.success('Successfully created player!');
   }
 
   onPlayerDeleted(playerId: number) {
     this.sendingPlayers.set(this.sendingPlayers().filter((p) => p.id !== playerId));
+    this.toastService.success('Successfully deleted player!');
   }
 }

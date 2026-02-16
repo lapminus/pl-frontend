@@ -1,13 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layout/header/header';
+import { SharedToast } from './shared/components/shared-toast/shared-toast';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, SharedToast],
   template: `
     <app-header />
-    <main><router-outlet /></main>
+    <main><router-outlet /><app-shared-toast /></main>
   `,
   styles: `
     main {

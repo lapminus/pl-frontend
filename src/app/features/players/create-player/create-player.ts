@@ -70,8 +70,7 @@ export class CreatePlayer implements OnInit {
   submitCreatePlayer() {
     this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
       next: (createdPlayer) => {
-        (console.log(`Created player: ${JSON.stringify(createdPlayer, null, 2)}`),
-          (this.newPlayer = {}),
+        ((this.newPlayer = {}),
           this.formErrors.set({}),
           this.playerCreated.emit(createdPlayer),
           this.closeCreatePlayerModal());
