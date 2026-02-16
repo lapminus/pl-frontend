@@ -1,3 +1,8 @@
+.players-grid {
+  width: calc(5 * 266px);
+  justify-content: flex-start;
+}
+
 .player-card-wrapper {
   width: 250px;
   border-radius: 0.75rem;

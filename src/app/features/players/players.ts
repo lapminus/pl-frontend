@@ -81,13 +81,30 @@ export class Players implements OnInit {
   onPlayerCreated(player: PlayerDto) {
     const lastPage = this.sendingPages() - 1;
     if (this.sendingCurrentPage() === lastPage) {
-      this.sendingPlayers.update((players) => [...players, player]);
+      this.sendingPlayers.update((players) => {
+        if (players.length < 20) {
+          return [...players, player];
+        } else {
+          this.sendingPages.update((pages) => pages + 1);
+          return players;
+        }
+      });
+    } else {
+      this.playerService.searchPlayersBy({ page: lastPage }).subscribe((result) => {
+        if (result.content.length >= 20) {
+          this.sendingPages.update((pages) => pages + 1);
+        }
+      });
     }
     this.toastService.success('Successfully created player!');
   }
 
   onPlayerDeleted(playerId: number) {
-    this.sendingPlayers.set(this.sendingPlayers().filter((p) => p.id !== playerId));
+    this.sendingPlayers.update((players) => players.filter((p) => p.id !== playerId));
+    this.playerService.searchPlayersBy({ page: this.sendingCurrentPage() }).subscribe((result) => {
+      this.sendingPlayers.set(result.content);
+      this.sendingPages.set(result.totalPages)
+    });
     this.toastService.success('Successfully deleted player!');
   }
 }
