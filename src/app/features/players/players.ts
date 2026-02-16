@@ -38,6 +38,7 @@ export class Players implements OnInit {
 
   sendingPages = signal<number>(0);
   sendingCurrentPage = signal<number>(0);
+  sendingEdited = signal(false);
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -78,6 +79,13 @@ export class Players implements OnInit {
     });
   }
 
+  onModalChanged(flag: boolean) {
+    console.log('modal changed', flag);
+    if (flag && this.sendingEdited()) {
+      this.sendingEdited.update((v) => !v);
+    }
+  }
+
   onPlayerCreated(player: PlayerDto) {
     const lastPage = this.sendingPages() - 1;
     if (this.sendingCurrentPage() === lastPage) {
@@ -99,11 +107,18 @@ export class Players implements OnInit {
     this.toastService.success('Successfully created player!');
   }
 
+  onPlayerEdited(playerId: number) {
+    this.playerService.searchPlayerById(playerId).subscribe((result) => {
+      this.sendingEdited.update((v) => !v);
+      console.log(JSON.stringify(result, null, 2));
+    });
+  }
+
   onPlayerDeleted(playerId: number) {
     this.sendingPlayers.update((players) => players.filter((p) => p.id !== playerId));
     this.playerService.searchPlayersBy({ page: this.sendingCurrentPage() }).subscribe((result) => {
       this.sendingPlayers.set(result.content);
-      this.sendingPages.set(result.totalPages)
+      this.sendingPages.set(result.totalPages);
     });
     this.toastService.success('Successfully deleted player!');
   }

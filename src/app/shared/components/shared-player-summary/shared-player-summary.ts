@@ -14,11 +14,16 @@ export class SharedPlayerSummary {
   playerService = inject(PlayerService);
   receivedPlayers = input.required<PlayerSummaryDto[]>();
   playerDeleted = output<number>();
+  playerEdited = output<number>();
 
   clickedDelete(playerId: number) {
     this.playerService.deletePlayer(playerId).subscribe({
       next: () => this.playerDeleted.emit(playerId),
       error: (err) => console.log(`Could not delete ${err}`),
     });
+  }
+
+  clickedEdit(playerId: number) {
+    this.playerEdited.emit(playerId);
   }
 }

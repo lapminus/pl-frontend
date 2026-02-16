@@ -59,6 +59,26 @@
       background: red;
     }
   }
+
+  .edit-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 2.5rem;
+    color: white;
+    background: rgba(0, 0, 255, 0.3);
+    border: none;
+    border-radius: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background: blue;
+    }
+  }
 }
 
 .unknown-pos {

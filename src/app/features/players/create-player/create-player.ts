@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import { Component, effect, inject, input, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
@@ -14,6 +14,8 @@ import { CommonModule } from '@angular/common';
 export class CreatePlayer implements OnInit {
   playerService = inject(PlayerService);
   isModalOpen = signal(false);
+  modalChanged = output<boolean>();
+  receivedIsEdited = input(false);
   formErrors = signal<Record<string, string>>({});
 
   newPlayer: Partial<PlayerDto> = {};
@@ -28,6 +30,14 @@ export class CreatePlayer implements OnInit {
     this.displayNations();
   }
 
+  constructor() {
+    effect(() => {
+      if (this.receivedIsEdited()) {
+        this.isModalOpen.set(true);
+      }
+    });
+  }
+
   openCreatePlayerModal() {
     this.isModalOpen.set(true);
     document.body.style.overflow = 'hidden'; // Probably not best practice
@@ -35,6 +45,7 @@ export class CreatePlayer implements OnInit {
 
   closeCreatePlayerModal() {
     this.isModalOpen.set(false);
+    this.modalChanged.emit(true);
     this.newPlayer = {};
     this.formErrors.set({});
     this.showMoreStats.set(false);
@@ -68,21 +79,27 @@ export class CreatePlayer implements OnInit {
   }
 
   submitCreatePlayer() {
-    this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
-      next: (createdPlayer) => {
-        ((this.newPlayer = {}),
-          this.formErrors.set({}),
-          this.playerCreated.emit(createdPlayer),
-          this.closeCreatePlayerModal());
-      },
-      error: (err: HttpErrorResponse) => {
-        if (err.status === 400 && err.error) {
-          this.formErrors.set(err.error);
-        } else {
-          this.formErrors.set({ 'General error': 'Something went wrong.' });
-        }
-      },
-    });
+    if (this.receivedIsEdited()) {
+      console.log('CALL SERVICE TO EDIT');
+    } else {
+      console.log('CALL SERVICE TO CREATE');
+    }
+    this.closeCreatePlayerModal()
+    // this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
+    //   next: (createdPlayer) => {
+    //     ((this.newPlayer = {}),
+    //       this.formErrors.set({}),
+    //       this.playerCreated.emit(createdPlayer),
+    //       this.closeCreatePlayerModal());
+    //   },
+    //   error: (err: HttpErrorResponse) => {
+    //     if (err.status === 400 && err.error) {
+    //       this.formErrors.set(err.error);
+    //     } else {
+    //       this.formErrors.set({ 'General error': 'Something went wrong.' });
+    //     }
+    //   },
+    // });
   }
 
   private displayNations() {

@@ -48,6 +48,10 @@ export class PlayerService {
     return this.http.post<PlayerDto>(this.baseUrl, dto);
   }
 
+  editPlayer(dto: PlayerDto, playerId: number): Observable<PlayerDto> {
+    return this.http.put<PlayerDto>(this.baseUrl + `/${playerId}`, dto);
+  }
+
   deletePlayer(playerId: number): Observable<void> {
     return this.http.delete<void>(this.baseUrl + `/${playerId}`);
   }
