@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
@@ -17,6 +17,7 @@ export class CreatePlayer implements OnInit {
   formErrors = signal<Record<string, string>>({});
 
   newPlayer: Partial<PlayerDto> = {};
+  playerCreated = output<PlayerDto>();
 
   nations = signal<string[]>([]);
   positions = ['MF', 'DF', 'GK', 'FW'];
@@ -72,6 +73,7 @@ export class CreatePlayer implements OnInit {
         (console.log(`Created player: ${JSON.stringify(createdPlayer, null, 2)}`),
           (this.newPlayer = {}),
           this.formErrors.set({}),
+          this.playerCreated.emit(createdPlayer),
           this.closeCreatePlayerModal());
       },
       error: (err: HttpErrorResponse) => {

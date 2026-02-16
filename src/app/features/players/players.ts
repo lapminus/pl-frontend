@@ -8,6 +8,7 @@ import { SharedPagination } from '../../shared/components/shared-pagination/shar
 import { CreatePlayer } from './create-player/create-player';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { PlayerDto } from '../../shared/models/playerDto.model';
 
 @Component({
   selector: 'app-players',
@@ -73,6 +74,10 @@ export class Players implements OnInit {
       queryParams: { page },
       queryParamsHandling: 'merge',
     });
+  }
+
+  onPlayerCreated(player: PlayerDto) {
+    this.sendingPlayers.update((players) => [...players, player]);
   }
 
   onPlayerDeleted(playerId: number) {

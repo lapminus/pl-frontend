@@ -1,5 +1,5 @@
 <app-shared-search (searchSubmitted)="receiveSearch($event)" [receivedPlaceholder]="sendingPlaceholder()" />
-<app-create-player />
+<app-create-player (playerCreated)="onPlayerCreated($event)" />
 @if (isLoading()) {
 <p>loading...</p>
 }
@@ -9,7 +9,7 @@
 @else if (sendingPlayers().length === 0) {
 <app-shared-no-results-found [receivedQuery]="sendingQuery()" />
 } @else {
-<app-shared-player-summary [receivedPlayers]="sendingPlayers()" (playerDeleted)="onPlayerDeleted($event)"/>
+<app-shared-player-summary [receivedPlayers]="sendingPlayers()" (playerDeleted)="onPlayerDeleted($event)" />
 <app-shared-pagination [receivedMaxPages]="sendingPages()" [receivedCurrentPage]="sendingCurrentPage()"
     (pageChanged)="receivePageChanged($event)" />
 }
