@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../../shared/services/player.service';
 import { PlayerDto } from '../../../shared/models/playerDto.model';
@@ -6,15 +6,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-create-player',
+  selector: 'app-save-player',
   imports: [FormsModule, CommonModule],
-  templateUrl: './create-player.html',
-  styleUrl: './create-player.scss',
+  templateUrl: './save-player.html',
+  styleUrl: './save-player.scss',
 })
-export class CreatePlayer implements OnInit {
+export class SavePlayer implements OnInit {
   playerService = inject(PlayerService);
-  isModalOpen = signal(false);
-  modalChanged = output<boolean>();
+  isModalOpen = model(false);
   receivedEditedId = input<number>();
   formErrors = signal<Record<string, string>>({});
 
@@ -32,8 +31,9 @@ export class CreatePlayer implements OnInit {
 
   constructor() {
     effect(() => {
-      if (this.receivedEditedId() !== -1) {
-        this.playerService.searchPlayerById(Number(this.receivedEditedId())).subscribe((player) => {
+      const editId = this.receivedEditedId()
+      if (editId !== -1) {
+        this.playerService.searchPlayerById(Number(editId)).subscribe((player) => {
           this.newPlayer = { ...player, nation: player.nation ?? '' };
           this.openCreatePlayerModal();
         });
@@ -48,7 +48,6 @@ export class CreatePlayer implements OnInit {
 
   closeCreatePlayerModal() {
     this.isModalOpen.set(false);
-    this.modalChanged.emit(true);
     this.newPlayer = { nation: '' };
     this.formErrors.set({});
     this.showMoreStats.set(false);

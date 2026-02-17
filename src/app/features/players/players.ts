@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { SharedSearch } from '../../shared/components/shared-search/shared-search';
 import { PlayerService } from '../../shared/services/player.service';
 import { PlayerSummaryDto } from '../../shared/models/playerSummaryDto.model';
 import { SharedNoResultsFound } from '../../shared/components/shared-no-results-found/shared-no-results-found';
 import { SharedPlayerSummary } from '../../shared/components/shared-player-summary/shared-player-summary';
 import { SharedPagination } from '../../shared/components/shared-pagination/shared-pagination';
-import { CreatePlayer } from './create-player/create-player';
+import { SavePlayer } from './save-player/save-player';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { PlayerDto } from '../../shared/models/playerDto.model';
@@ -18,7 +18,7 @@ import { ToastService } from '../../shared/services/toast.service';
     SharedNoResultsFound,
     SharedPlayerSummary,
     SharedPagination,
-    CreatePlayer,
+    SavePlayer,
   ],
   templateUrl: './players.html',
   styleUrl: './players.scss',
@@ -39,6 +39,18 @@ export class Players implements OnInit {
   sendingPages = signal<number>(0);
   sendingCurrentPage = signal<number>(0);
   sendingEditedId = signal<number>(-1);
+  isModalOpen = signal(false);
+
+  constructor() {
+    let prevModelState = false;
+    effect(() => {
+      let currentModelState = this.isModalOpen();
+      if (prevModelState && !currentModelState && this.sendingEditedId() !== -1) {
+        this.sendingEditedId.set(-1);
+      }
+      prevModelState = currentModelState;
+    });
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -79,12 +91,6 @@ export class Players implements OnInit {
     });
   }
 
-  onModalChanged(flag: boolean) {
-    if (flag && this.sendingEditedId() !== -1) {
-      this.sendingEditedId.set(-1);
-    }
-  }
-
   onPlayerCreated(player: PlayerDto) {
     const lastPage = this.sendingPages() - 1;
     if (this.sendingCurrentPage() === lastPage) {
@@ -107,7 +113,7 @@ export class Players implements OnInit {
   }
 
   onPlayerEdited(playerId: number) {
-    this.sendingEditedId.update((id) => playerId);
+    this.sendingEditedId.set(playerId);
   }
 
   onPlayerDeleted(playerId: number) {

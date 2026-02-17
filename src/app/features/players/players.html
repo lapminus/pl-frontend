@@ -1,6 +1,6 @@
 <app-shared-search (searchSubmitted)="receiveSearch($event)" [receivedPlaceholder]="sendingPlaceholder()" />
-<app-create-player (playerCreated)="onPlayerCreated($event)" [receivedEditedId]="sendingEditedId()"
-    (modalChanged)="onModalChanged($event)" />
+<app-save-player (playerCreated)="onPlayerCreated($event)" [receivedEditedId]="sendingEditedId()"
+    [(isModalOpen)]="isModalOpen" />
 @if (isLoading()) {
 <p>loading...</p>
 }
