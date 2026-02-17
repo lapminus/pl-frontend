@@ -13,13 +13,7 @@ import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-players',
-  imports: [
-    SharedSearch,
-    SharedNoResultsFound,
-    SharedPlayerSummary,
-    SharedPagination,
-    SavePlayer,
-  ],
+  imports: [SharedSearch, SharedNoResultsFound, SharedPlayerSummary, SharedPagination, SavePlayer],
   templateUrl: './players.html',
   styleUrl: './players.scss',
 })
@@ -91,25 +85,32 @@ export class Players implements OnInit {
     });
   }
 
-  onPlayerCreated(player: PlayerDto) {
-    const lastPage = this.sendingPages() - 1;
-    if (this.sendingCurrentPage() === lastPage) {
-      this.sendingPlayers.update((players) => {
-        if (players.length < 20) {
-          return [...players, player];
-        } else {
-          this.sendingPages.update((pages) => pages + 1);
-          return players;
-        }
-      });
+  onPlayerSaved(player: PlayerDto, type: 'Create' | 'Edit') {
+    if (type === 'Create') {
+      const lastPage = this.sendingPages() - 1;
+      if (this.sendingCurrentPage() === lastPage) {
+        this.sendingPlayers.update((players) => {
+          if (players.length < 20) {
+            return [...players, player];
+          } else {
+            this.sendingPages.update((pages) => pages + 1);
+            return players;
+          }
+        });
+      } else {
+        this.playerService.searchPlayersBy({ page: lastPage }).subscribe((result) => {
+          if (result.content.length >= 20) {
+            this.sendingPages.update((pages) => pages + 1);
+          }
+        });
+      }
+      this.toastService.success('Successfully created player!');
     } else {
-      this.playerService.searchPlayersBy({ page: lastPage }).subscribe((result) => {
-        if (result.content.length >= 20) {
-          this.sendingPages.update((pages) => pages + 1);
-        }
-      });
+      this.sendingPlayers.update((players) =>
+        players.map((p) => (p.id === player.id ? player : p)),
+      );
+      this.toastService.success('Successfully edited player!');
     }
-    this.toastService.success('Successfully created player!');
   }
 
   onPlayerEdited(playerId: number) {

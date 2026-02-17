@@ -5,6 +5,7 @@
 
 .player-card-wrapper {
   width: 250px;
+  height: 180px;
   border-radius: 0.75rem;
   text-align: center;
   transition:
@@ -17,8 +18,25 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   }
 
+  .player-card {
+    height: 100%;
+  }
+
   .card-body {
     padding: 1rem;
+    overflow: hidden;
+
+    .card-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .hover-overlay {

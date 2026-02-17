@@ -18,7 +18,7 @@ export class SavePlayer implements OnInit {
   formErrors = signal<Record<string, string>>({});
 
   newPlayer: Partial<PlayerDto> = { nation: '' };
-  playerCreated = output<PlayerDto>();
+  playerSaved = output<{ player: PlayerDto; type: 'Create' | 'Edit' }>();
 
   nations = signal<string[]>([]);
   positions = ['MF', 'DF', 'GK', 'FW'];
@@ -31,7 +31,7 @@ export class SavePlayer implements OnInit {
 
   constructor() {
     effect(() => {
-      const editId = this.receivedEditedId()
+      const editId = this.receivedEditedId();
       if (editId !== -1) {
         this.playerService.searchPlayerById(Number(editId)).subscribe((player) => {
           this.newPlayer = { ...player, nation: player.nation ?? '' };
@@ -77,42 +77,27 @@ export class SavePlayer implements OnInit {
   }
 
   submitPlayer() {
-    if (this.receivedEditedId() !== -1) {
-      this.playerService
-        .editPlayer(this.newPlayer as PlayerDto, Number(this.receivedEditedId()))
-        .subscribe({
-          next: (savedPlayer) => {
-            ((this.newPlayer = {}),
-              this.formErrors.set({}),
-              console.log(`Saved player: ${JSON.stringify(savedPlayer, null, 2)}`),
-              // saved
-              this.closeCreatePlayerModal());
-          },
-          error: (err: HttpErrorResponse) => {
-            if (err.status === 400 && err.error) {
-              this.formErrors.set(err.error);
-            } else {
-              this.formErrors.set({ 'General error': 'Something went wrong.' });
-            }
-          },
-        });
-    } else {
-      this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
-        next: (createdPlayer) => {
-          ((this.newPlayer = {}),
-            this.formErrors.set({}),
-            this.playerCreated.emit(createdPlayer),
-            this.closeCreatePlayerModal());
-        },
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 400 && err.error) {
-            this.formErrors.set(err.error);
-          } else {
-            this.formErrors.set({ 'General error': 'Something went wrong.' });
-          }
-        },
-      });
-    }
+    const editId = this.receivedEditedId();
+    const operation =
+      editId !== -1
+        ? this.playerService.editPlayer(this.newPlayer as PlayerDto, Number(editId))
+        : this.playerService.createPlayer(this.newPlayer as PlayerDto);
+
+    operation.subscribe({
+      next: (player) => {
+        ((this.newPlayer = {}),
+          this.formErrors.set({}),
+          this.playerSaved.emit({ player, type: editId !== -1 ? 'Edit' : 'Create' }),
+          this.closeCreatePlayerModal());
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 400 && err.error) {
+          this.formErrors.set(err.error);
+        } else {
+          this.formErrors.set({ 'General error': 'Something went wrong.' });
+        }
+      },
+    });
   }
 
   private displayNations() {
