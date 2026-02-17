@@ -38,7 +38,7 @@ export class Players implements OnInit {
 
   sendingPages = signal<number>(0);
   sendingCurrentPage = signal<number>(0);
-  sendingEdited = signal(false);
+  sendingEditedId = signal<number>(-1);
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -80,9 +80,8 @@ export class Players implements OnInit {
   }
 
   onModalChanged(flag: boolean) {
-    console.log('modal changed', flag);
-    if (flag && this.sendingEdited()) {
-      this.sendingEdited.update((v) => !v);
+    if (flag && this.sendingEditedId() !== -1) {
+      this.sendingEditedId.set(-1);
     }
   }
 
@@ -108,10 +107,7 @@ export class Players implements OnInit {
   }
 
   onPlayerEdited(playerId: number) {
-    this.playerService.searchPlayerById(playerId).subscribe((result) => {
-      this.sendingEdited.update((v) => !v);
-      console.log(JSON.stringify(result, null, 2));
-    });
+    this.sendingEditedId.update((id) => playerId);
   }
 
   onPlayerDeleted(playerId: number) {

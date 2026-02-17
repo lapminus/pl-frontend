@@ -7,7 +7,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{receivedIsEdited() ? "Edit" : "Create"}} Player</h5>
+                <h5 class="modal-title">{{receivedEditedId() !== -1 ? "Edit" : "Create"}} Player</h5>
                 <button class="btn-close" (click)="closeCreatePlayerModal()"></button>
             </div>
             <div class="modal-body">
@@ -25,8 +25,8 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nation</label>
-                    <select class="form-select" #nationSelect (change)="selectNation(nationSelect.value)">
-                        <option value="">Select a nation</option>
+                    <select class="form-select" [(ngModel)]="newPlayer.nation" name="nation">
+                        <option value="" disabled selected>Select a nation</option>
                         @for (nation of nations(); track nation) {
                         <option [value]="nation">
                             {{ nation.split(' ')[1] }}
@@ -124,7 +124,7 @@
                     <div class="invalid-feedback">{{formErrors()['yellowCards']}}</div>
                 </div>
                 }
-                <button class="btn btn-success" (click)="submitCreatePlayer()">{{receivedIsEdited() ? "Save" : "Create"}}</button>
+                <button class="btn btn-success" (click)="submitPlayer()">{{receivedEditedId() !== -1 ? "Save" : "Create"}}</button>
             </div>
         </div>
     </div>

@@ -15,10 +15,10 @@ export class CreatePlayer implements OnInit {
   playerService = inject(PlayerService);
   isModalOpen = signal(false);
   modalChanged = output<boolean>();
-  receivedIsEdited = input(false);
+  receivedEditedId = input<number>();
   formErrors = signal<Record<string, string>>({});
 
-  newPlayer: Partial<PlayerDto> = {};
+  newPlayer: Partial<PlayerDto> = { nation: '' };
   playerCreated = output<PlayerDto>();
 
   nations = signal<string[]>([]);
@@ -32,8 +32,11 @@ export class CreatePlayer implements OnInit {
 
   constructor() {
     effect(() => {
-      if (this.receivedIsEdited()) {
-        this.isModalOpen.set(true);
+      if (this.receivedEditedId() !== -1) {
+        this.playerService.searchPlayerById(Number(this.receivedEditedId())).subscribe((player) => {
+          this.newPlayer = { ...player, nation: player.nation ?? '' };
+          this.openCreatePlayerModal();
+        });
       }
     });
   }
@@ -46,7 +49,7 @@ export class CreatePlayer implements OnInit {
   closeCreatePlayerModal() {
     this.isModalOpen.set(false);
     this.modalChanged.emit(true);
-    this.newPlayer = {};
+    this.newPlayer = { nation: '' };
     this.formErrors.set({});
     this.showMoreStats.set(false);
     document.body.style.overflow = 'visible';
@@ -74,37 +77,48 @@ export class CreatePlayer implements OnInit {
     return this.newPlayer.pos?.split(',').includes(pos) ?? false;
   }
 
-  selectNation(nation: string) {
-    this.newPlayer.nation = nation;
-  }
-
-  submitCreatePlayer() {
-    if (this.receivedIsEdited()) {
-      console.log('CALL SERVICE TO EDIT');
+  submitPlayer() {
+    if (this.receivedEditedId() !== -1) {
+      this.playerService
+        .editPlayer(this.newPlayer as PlayerDto, Number(this.receivedEditedId()))
+        .subscribe({
+          next: (savedPlayer) => {
+            ((this.newPlayer = {}),
+              this.formErrors.set({}),
+              console.log(`Saved player: ${JSON.stringify(savedPlayer, null, 2)}`),
+              // saved
+              this.closeCreatePlayerModal());
+          },
+          error: (err: HttpErrorResponse) => {
+            if (err.status === 400 && err.error) {
+              this.formErrors.set(err.error);
+            } else {
+              this.formErrors.set({ 'General error': 'Something went wrong.' });
+            }
+          },
+        });
     } else {
-      console.log('CALL SERVICE TO CREATE');
+      this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
+        next: (createdPlayer) => {
+          ((this.newPlayer = {}),
+            this.formErrors.set({}),
+            this.playerCreated.emit(createdPlayer),
+            this.closeCreatePlayerModal());
+        },
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 400 && err.error) {
+            this.formErrors.set(err.error);
+          } else {
+            this.formErrors.set({ 'General error': 'Something went wrong.' });
+          }
+        },
+      });
     }
-    this.closeCreatePlayerModal()
-    // this.playerService.createPlayer(this.newPlayer as PlayerDto).subscribe({
-    //   next: (createdPlayer) => {
-    //     ((this.newPlayer = {}),
-    //       this.formErrors.set({}),
-    //       this.playerCreated.emit(createdPlayer),
-    //       this.closeCreatePlayerModal());
-    //   },
-    //   error: (err: HttpErrorResponse) => {
-    //     if (err.status === 400 && err.error) {
-    //       this.formErrors.set(err.error);
-    //     } else {
-    //       this.formErrors.set({ 'General error': 'Something went wrong.' });
-    //     }
-    //   },
-    // });
   }
 
   private displayNations() {
     this.playerService.getAllNations().subscribe((result) => {
-      const displayName = result.filter((item) => item !== null).sort();
+      const displayName = result.filter((item) => item !== null && item !== '').sort();
       this.nations.set(displayName);
     });
   }
